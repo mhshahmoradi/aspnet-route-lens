@@ -1,0 +1,107 @@
+{
+    "name": "aspnet-route-lens",
+    "displayName": "ASP.NET Route Lens",
+    "description": "Scans your ASP.NET Core project and lists all HTTP endpoints in a sidebar panel. Click any route to jump directly to its definition. Supports attribute routing, minimal APIs, and live filtering by method, path, or controller.",
+    "version": "1.0.0",
+    "publisher": "mhreza",
+    "icon": "media/icon.png",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "aspnet",
+        "csharp",
+        "routes",
+        "navigation",
+        "dotnet"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "aspnet-route-lens.rebuildIndex",
+                "title": "Rebuild Route Index",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "aspnet-route-lens.openRoute",
+                "title": "Go to Route"
+            },
+            {
+                "command": "aspnet-route-lens.filterRoutes",
+                "title": "Filter Endpoints",
+                "icon": "$(search)"
+            },
+            {
+                "command": "aspnet-route-lens.clearFilter",
+                "title": "Clear Filter",
+                "icon": "$(close)"
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "aspnet-route-lens",
+                    "title": "ASP.NET Route Lens",
+                    "icon": "./media/routes-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "aspnet-route-lens": [
+                {
+                    "id": "aspnet-route-lens.routeExplorer",
+                    "name": "Endpoints"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "aspnet-route-lens.filterRoutes",
+                    "when": "view == aspnet-route-lens.routeExplorer",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "aspnet-route-lens.clearFilter",
+                    "when": "view == aspnet-route-lens.routeExplorer && aspnet-route-lens.hasFilter",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "aspnet-route-lens.rebuildIndex",
+                    "when": "view == aspnet-route-lens.routeExplorer",
+                    "group": "navigation@3"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "bun run compile:prod",
+        "compile": "bun build ./src/extension.ts --outdir ./out --target node --format cjs --external vscode --sourcemap=external",
+        "compile:prod": "bun build ./src/extension.ts --outdir ./out --target node --format cjs --external vscode --minify",
+        "watch": "bun build ./src/extension.ts --outdir ./out --target node --format cjs --external vscode --sourcemap=external --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "lint": "tsc --noEmit",
+        "package": "bun run compile:prod && bunx @vscode/vsce package --no-dependencies"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/vscode": "^1.85.0",
+        "@vitest/coverage-v8": "^1.6.0",
+        "@vscode/test-electron": "^2.3.9",
+        "typescript": "^5.4.0",
+        "vitest": "^1.6.0"
+    }
+}
