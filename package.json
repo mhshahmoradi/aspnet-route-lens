@@ -2,7 +2,7 @@
     "name": "aspnet-route-lens",
     "displayName": "ASP.NET Route Lens",
     "description": "Scans your ASP.NET Core project and lists all HTTP endpoints in a sidebar panel. Click any route to jump directly to its definition. Supports attribute routing, minimal APIs, and live filtering by method, path, or controller.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "mhreza",
     "icon": "media/icon.png",
     "repository": {

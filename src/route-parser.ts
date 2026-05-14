@@ -31,7 +31,7 @@ const CONTROLLER_CLASS_RE =
 const CLASS_ROUTE_ATTR_RE = /\[Route\(\s*"([^"]+)"\s*\)/;
 
 const HTTP_VERB_ATTR_RE =
-  /\[(HttpGet|HttpPost|HttpPut|HttpDelete|HttpPatch|HttpHead|HttpOptions)\s*(?:\(\s*"([^"]*)"\s*\))?\]/;
+  /\[(HttpGet|HttpPost|HttpPut|HttpDelete|HttpPatch|HttpHead|HttpOptions)\s*(?:\((?:\s*"([^"]*)"[^)]*|[^)]*)\))?\]/;
 
 const MINIMAL_API_RE =
   /\.(MapGet|MapPost|MapPut|MapDelete|MapPatch|MapHead|MapMethods)\s*\(\s*"([^"]+)"/;
@@ -140,7 +140,6 @@ export function parseRoutes(content: string, filePath: string): ParsedRoute[] {
       const methodDeclLine = raw;
       const isMethodDecl =
         /\b(public|private|protected|internal)\b/.test(methodDeclLine) &&
-        /\b(IActionResult|ActionResult|Task|void|async)\b/.test(methodDeclLine) &&
         /\w+\s*\(/.test(methodDeclLine);
 
       if (isMethodDecl) {

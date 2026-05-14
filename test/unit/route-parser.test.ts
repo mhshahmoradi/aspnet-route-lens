@@ -175,6 +175,62 @@ public class NoBaseController : ControllerBase
     expect(routes).toHaveLength(1);
     expect(routes[0].path).toBe("/health");
   });
+
+  it("parses [HttpGet(Name = '...')] with no path – uses base route", () => {
+    const content = `
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
+{
+    [HttpGet(Name = "GetWeatherForecast")]
+    public IEnumerable<WeatherForecast> Get()
+    {
+        return Enumerable.Empty<WeatherForecast>();
+    }
+}
+`;
+    const routes = parseRoutes(content, FILE);
+    expect(routes).toHaveLength(1);
+    expect(routes[0].method).toBe("GET");
+    expect(routes[0].path).toBe("/weatherforecast");
+    expect(routes[0].containerName).toBe("WeatherForecastController");
+  });
+
+  it("parses [HttpGet('path', Name = '...')] – uses path, ignores name param", () => {
+    const content = `
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    [HttpGet("{id}", Name = "GetProductById")]
+    public IActionResult GetById(int id)
+    {
+        return Ok();
+    }
+}
+`;
+    const routes = parseRoutes(content, FILE);
+    expect(routes).toHaveLength(1);
+    expect(routes[0].method).toBe("GET");
+    expect(routes[0].path).toBe("/api/products/{id}");
+  });
+
+  it("parses [HttpPost(Name = '...')] – uses base route only", () => {
+    const content = `
+[Route("api/orders")]
+public class OrdersController : ControllerBase
+{
+    [HttpPost(Name = "CreateOrder")]
+    public IActionResult Create()
+    {
+        return Ok();
+    }
+}
+`;
+    const routes = parseRoutes(content, FILE);
+    expect(routes).toHaveLength(1);
+    expect(routes[0].method).toBe("POST");
+    expect(routes[0].path).toBe("/api/orders");
+  });
 });
 
 describe("parseRoutes – minimal API", () => {
